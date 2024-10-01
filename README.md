@@ -17,6 +17,24 @@ Nanowatt Neural Network Platform (N3P)
 - 支持实时数据处理和分析。
 
 
+### Bug
+
+RISCV
+
+```shell
+sudo apt-get install srecord gcc-multilib qemu-system-riscv32
+wget https://github.com/riscv-collab/riscv-gnu-toolchain/releases/download/2024.08.06/riscv32-elf-ubuntu-22.04-gcc-nightly-2024.08.06-nightly.tar.gz
+tar xvzf riscv32-elf-ubuntu-22.04-gcc-nightly-2024.08.06-nightly.tar.gz
+# ...
+# Add riscv/bin to $PATH
+# ...
+
+riscv32-unknown-elf-gcc -march=rv32imc -mabi=ilp32 -static -ffreestanding -nostartfiles -Wl,-Ttext=0x80000000 -O3 -o a a.c
+qemu-system-riscv32 -nographic -M virt -bios none -kernel a
+```
+
+
+
 
 ### Ref
 
