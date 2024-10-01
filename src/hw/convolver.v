@@ -2,37 +2,37 @@
 `timescale 1ns / 1ps
 
 module convolver #(
-parameter n = 9'h00a,     // activation map size
-parameter k = 9'h003,     // kernel size 
-parameter s = 1,          // value of stride (horizontal and vertical stride are equal)
-parameter N = 16,         //total bit width
-parameter Q = 12          //number of fractional bits in case of fixed point representation.
+    parameter n = 9'h00a,     // activation map size
+    parameter k = 9'h003,     // kernel size 
+    parameter s = 1,          // value of stride (horizontal and vertical stride are equal)
+    parameter N = 16,         //total bit width
+    parameter Q = 12          //number of fractional bits in case of fixed point representation.
 )(
-input clk,
-input ce,
-input global_rst,
-input [N-1:0] activation,
-input [(k*k)*16-1:0] weight1,
-output[N-1:0] conv_op,
-output valid_conv,
-output end_conv
+    input clk,
+    input ce,
+    input global_rst,
+    input [N-1:0] activation,
+    input [(k*k)*16-1:0] weight1,
+    output[N-1:0] conv_op,
+    output valid_conv,
+    output end_conv
 );
     
-reg [31:0] count,count2,count3,row_count;
-reg en1,en2,en3;
-    
-wire [15:0] tmp [k*k+1:0];
-wire [15:0] weight [0:k*k-1];
+    reg [31:0] count,count2,count3,row_count;
+    reg en1,en2,en3;
+        
+    wire [15:0] tmp [k*k+1:0];
+    wire [15:0] weight [0:k*k-1];
 
 //breaking our weights into separate variables. We are forced to do this because verilog does not allow us to pass multi-dimensional 
 //arrays as parameters
 //----------------------------------------------------------------------------------------------------------------------------------
 generate
-	genvar l;
-	for(l=0;l<k*k;l=l+1)
-	begin
+    genvar l;
+    for(l=0;l<k*k;l=l+1)
+    begin
         assign weight [l][N-1:0] = weight1[N*l +: N]; 		
-	end	
+    end	
 endgenerate
 //----------------------------------------------------------------------------------------------------------------------------------
 assign tmp[0] = 32'h0000000;
@@ -43,9 +43,9 @@ genvar i;
   for(i = 0;i<k*k;i=i+1)
   begin: MAC
     if((i+1)%k ==0)                       //end of the row
-    begin
+    begin : gen_blk1
       if(i==k*k-1)                        //end of convolver
-      begin
+      begin : gen_blk2
       (* use_dsp = "yes" *)               //this line is optional depending on tool behaviour
       mac_manual #(.N(N),.Q(Q)) mac(      //implements a*b+c
         .clk(clk),                        // input clk
@@ -58,7 +58,7 @@ genvar i;
         );
       end
       else
-      begin
+      begin : gen_blk3
       wire [N-1:0] tmp2;
       //make a mac unit
       (* use_dsp = "yes" *)               //this line is optional depending on tool behaviour
@@ -82,7 +82,7 @@ genvar i;
       end
     end
     else
-    begin
+    begin : gen_blk4
     (* use_dsp = "yes" *)               //this line is optional depending on tool behaviour
    mac_manual #(.N(N),.Q(Q)) mac2(                    
       .clk(clk), 
