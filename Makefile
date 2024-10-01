@@ -11,7 +11,7 @@ CSRC		:= $(wildcard $(SRC_DIR)/sw/*.c $(SRC_DIR)/sw/*.cc $(SRC_DIR)/sw/*.cpp)
 
 
 sim: $(VTOP) $(VSRC) $(CTOP)
-	verilator --cc --exe --build -Wall --trace --top-module $(NTOP) -v $(VTOP) $(VSRC) $(CTOP)
+	verilator --cc --exe --build -Wall --trace --top-module $(NTOP) $(VTOP) $(VSRC) $(CTOP)
 
 run: $(OBJ_DIR)/$(CSIM)
 	cd $(OBJ_DIR) && ./$(CSIM)
