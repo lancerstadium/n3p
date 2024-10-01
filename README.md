@@ -21,3 +21,5 @@ Nanowatt Neural Network Platform (N3P)
 ### Ref
 
 - [conv_acc](https://thedatabus.in/conv_acc)
+- [论做AI芯片的正确姿势](https://zhuanlan.zhihu.com/p/81141220)
+- [tinyriscv](https://gitee.com/liangkangnan/tinyriscv)

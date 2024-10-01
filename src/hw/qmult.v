@@ -5,6 +5,7 @@
 // The same thing in A(I,F) format would be A(3,12)
 module qmult #(
 	//Parameterized values
+    /* verilator lint_off UNOPTFLAT */
 	parameter Q = 12,
 	parameter N = 16
 	)
@@ -22,6 +23,7 @@ module qmult #(
 	
 	wire [2*N-1:0]	f_result;		//	Multiplication by 2 values of N bits requires a 
 									//	register that is N+N = 2N deep
+    /* verilator lint_off UNUSEDSIGNAL */
 	wire [N-1:0]   multiplicand;
 	wire [N-1:0]	multiplier;
 	wire [N-1:0]    a_2cmp, b_2cmp;
@@ -32,7 +34,7 @@ module qmult #(
 	
     assign multiplicand = (a[N-1]) ? a_2cmp : a;              
     assign multiplier   = (b[N-1]) ? b_2cmp : b;
-    
+    /* verilator lint_off SELRANGE */
     assign q_result[N-1] = a[N-1]^b[N-1];                      //Sign bit of output would be XOR or input sign bits
     assign f_result = multiplicand[N-2:0] * multiplier[N-2:0]; //We remove the sign bit for multiplication
     assign quantized_result = f_result[N-2+Q:Q];               //Quantization of output to required number of bits

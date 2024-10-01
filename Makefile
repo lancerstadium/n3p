@@ -1,6 +1,6 @@
 OBJ_DIR		:= obj_dir
 SRC_DIR 	:= src
-NTOP  		:= top
+NTOP  		?= top
 VTOP		:= $(SRC_DIR)/hw/$(NTOP).v
 CTOP		:= $(SRC_DIR)/sw/V$(NTOP).cpp
 CSIM		:= V$(NTOP)

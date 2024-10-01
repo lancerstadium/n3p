@@ -35,8 +35,9 @@ generate
     end	
 endgenerate
 //----------------------------------------------------------------------------------------------------------------------------------
+/* verilator lint_off WIDTHTRUNC */
 assign tmp[0] = 32'h0000000;
-    
+
 //The following generate loop enables us to lay out any number of MAC units specified during the synthesis, without having to commit to a //fixed size 
 generate
 genvar i;
@@ -71,7 +72,6 @@ genvar i;
         .c(tmp[i]), 
         .p(tmp2) 
         );
-      
       variable_shift_reg #(.WIDTH(32),.SIZE(n-k)) SR (
           .d(tmp2),                  // input [32 : 0] d
           .clk(clk),                 // input clk
@@ -80,6 +80,7 @@ genvar i;
           .out(tmp[i+1])             // output [32 : 0] q
           );
       end
+
     end
     else
     begin : gen_blk4
@@ -111,6 +112,7 @@ begin
     en3<=0;
   end
   else if(ce)
+  
   begin
     if(count == (k-1)*n+k-1)        // time taken for the pipeline to fill up is (k-1)*n+k-1
     begin
@@ -122,6 +124,7 @@ begin
       count<= count+1'b1;
     end
   end
+
   if(en1 && en2) 
   begin
     if(count2 == n-k)
@@ -156,4 +159,6 @@ begin
 end
 	assign end_conv = (count>= n*n+2) ? 1'b1 : 1'b0;
 	assign valid_conv = (en1&&en2&&en3);
+/* verilator lint_on WIDTHTRUNC */
+    
 endmodule
